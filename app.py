@@ -18,7 +18,7 @@ with col1:
 with col2:
     st.markdown("### www.cognitivecloud.ai")
     st.markdown("**Developed for Martin Luther King High School by Xavier Honablue M.Ed**")
-    st.markdown("**Principal: Damian Perry | Detroit, Michigan**")
+    st.markdown("**Principal: Dr. Damian Perry | Detroit, Michigan**")
 
 st.markdown("---")
 
