@@ -16,9 +16,9 @@ with col1:
         pass  # No fallback if logo file not found
 
 with col2:
-    st.markdown("### www.cognitivecloud.ai")
-    st.markdown("**Developed for Martin Luther King High School by Xavier Honablue M.Ed**")
-    st.markdown("**Principal: Dr. Damian Perry | Detroit, Michigan**")
+    st.markdown("**Developed for Martin Luther King High School | Detroit, Michigan **")
+    st.markdown("**Principal: Dr. Damian Perry **")
+    st.markdown("### www.cognitivecloud.ai by Xavier Honablue M.Ed")
 
 st.markdown("---")
 
