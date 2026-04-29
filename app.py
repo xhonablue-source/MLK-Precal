@@ -64,30 +64,6 @@ michigan_standard = st.selectbox("📋 Select specific Michigan Merit Curriculum
     "HSA.F.LE.3 - Observe using graphs and tables that exponential functions grow by factors"
 ])
 
-# --- Student Info ---
-name = st.text_input("Enter your name:")
-avatar = st.selectbox("Choose your multidimensional shape avatar:", [
-    "🔺 Tetrahedron", "🚘 Dodecahedron", "⬛ Cube", "🌀 Torus"
-])
-
-if name:
-    st.success(f"Welcome, {name} the {avatar}! Let's begin Crusader Vision.")
-
-# --- Role or Identity Selection ---
-role_options = [
-    "🌟 Skill Mastery Star",
-    "🚀 Growth Mode",
-    "🎮 Level-Up Leader",
-    "🎯 Focus Champ",
-    "📊 Data Boss",
-    "🧠 Brain Builder",
-    "🎓 Crusader Scholar",
-    "📈 Goal Getter",
-    "🛠️ Problem Solver",
-    "💡 Idea Generator"
-]
-role = st.selectbox("Pick your learning mode or style:", role_options)
-
 # --- Function Explorer Section ---
 st.header("🔍 Let's explore what a function looks like in real life...")
 
@@ -95,7 +71,7 @@ st.header("🔍 Let's explore what a function looks like in real life...")
 st.header("🎯 Function Matching Challenge")
 st.markdown("**Match each function rule to its real-life context before exploring the visualizations!**")
 
-# Create the matching data - DETROIT EDITION
+# Create the matching data - DETROIT EDITION with Function Type and Standard Form
 matching_data = {
     "Function Name": [
         "Auto Factory Pay", "TikTok Followers", "Lyft Ride", "Phone Battery", 
@@ -108,6 +84,16 @@ matching_data = {
         "f(x) = 1000 + 75x (followers)", "f(x) = 100 × log(x+1) (lbs)", 
         "f(x) = 12x + 8 (minutes)", "f(x) = 32 - 3x (°F)", 
         "f(x) = 45 + 0.12x (USD)"
+    ],
+    "Function Type": [
+        "Linear", "Exponential", "Linear", "Linear",
+        "Quadratic", "Linear", "Logarithmic", "Linear",
+        "Linear", "Linear"
+    ],
+    "Standard Form": [
+        "f(x) = mx + b", "f(x) = a × b^x", "f(x) = mx + b", "f(x) = mx + b",
+        "f(x) = ax² + bx + c", "f(x) = mx + b", "f(x) = a × log(x + b)", "f(x) = mx + b",
+        "f(x) = mx + b", "f(x) = mx + b"
     ],
     "Real-Life Context": [
         "🏭 Earn $28/hour at Detroit auto plant",
@@ -131,21 +117,30 @@ st.dataframe(df, use_container_width=True, hide_index=True)
 st.subheader("📝 Quick Matching Quiz")
 st.markdown("Test your understanding by matching these function types:")
 
+# Initialize session state for tracking quiz answers and attempts
+if 'quiz_answers' not in st.session_state:
+    st.session_state.quiz_answers = {}
+if 'quiz_attempts' not in st.session_state:
+    st.session_state.quiz_attempts = {}
+
 # Quiz questions for matching - DETROIT EDITION
 quiz_options = {
     "Which function represents EXPONENTIAL growth?": {
         "options": ["f(x) = 28x", "f(x) = 500 × 1.4^x", "f(x) = 3x + 2.5", "f(x) = 100 - 10x"],
         "correct": "f(x) = 500 × 1.4^x",
+        "hint": "💡 Look for the function where the variable (x) is in the exponent. Exponential functions multiply by the same factor each time - like content going viral!",
         "explanation": "Exponential functions have the variable in the exponent (1.4^x), showing rapid growth like viral content!"
     },
     "Which function shows a QUADRATIC relationship?": {
         "options": ["f(x) = 32 - 3x", "f(x) = -1(x - 15)² + 35", "f(x) = 100 × log(x+1)", "f(x) = 45 + 0.12x"],
         "correct": "f(x) = -1(x - 15)² + 35",
+        "hint": "💡 Look for the function with x². Quadratic functions create parabolic curves - think about the arc of a football throw!",
         "explanation": "Quadratic functions have x², creating parabolic shapes like a Lions QB throw!"
     },
     "Which function has a CONSTANT rate of change?": {
         "options": ["f(x) = 500 × 1.4^x", "f(x) = 100 × log(x+1)", "f(x) = 28x", "f(x) = -1(x - 15)² + 35"],
         "correct": "f(x) = 28x",
+        "hint": "💡 Look for the simplest function with just 'x' (not x², not in an exponent, not in a log). Think about earning the same amount every hour!",
         "explanation": "Linear functions like f(x) = 28x have constant rates - you earn the same $28 every hour at the auto plant!"
     }
 }
@@ -154,11 +149,85 @@ for question, data in quiz_options.items():
     st.write(f"**{question}**")
     user_answer = st.radio("Select your answer:", data["options"], key=question)
     
+    # Initialize attempts for this question if not exists
+    if question not in st.session_state.quiz_attempts:
+        st.session_state.quiz_attempts[question] = 0
+    
     if st.button(f"Check Answer", key=f"check_{question}"):
         if user_answer == data["correct"]:
             st.success(f"✅ Correct! {data['explanation']}")
+            st.session_state.quiz_answers[question] = True
+            st.session_state.quiz_attempts[question] = 0  # Reset attempts on correct answer
         else:
-            st.error(f"❌ Try again! The correct answer is {data['correct']}. {data['explanation']}")
+            st.session_state.quiz_attempts[question] += 1
+            
+            if st.session_state.quiz_attempts[question] == 1:
+                # First wrong attempt - give hint
+                st.warning(f"❌ Not quite! Let's try again with a hint:")
+                st.info(data["hint"])
+                st.session_state.quiz_answers[question] = False
+            else:
+                # Second wrong attempt - show correct answer
+                st.error(f"❌ Still not quite right. {data['explanation']}")
+                st.warning(f"💡 **The correct answer is: {data['correct']}**")
+                st.info("Review the function types section below and try again to master this concept!")
+                st.session_state.quiz_answers[question] = False
+
+# Check if all questions are answered correctly
+if len(st.session_state.quiz_answers) == len(quiz_options) and all(st.session_state.quiz_answers.values()):
+    st.success("🎉 Perfect score! You've mastered function types!")
+    st.balloons()
+
+st.markdown("---")
+
+# Function Type Descriptions
+st.header("📊 Understanding Function Types")
+st.markdown("Before we dive into the examples, let's understand what each function type represents:")
+
+# Create columns for function type descriptions
+col1, col2 = st.columns(2)
+
+with col1:
+    st.markdown("### 📈 Linear Functions")
+    st.markdown("**Concept:** *Steady & Predictable*")
+    st.markdown("""
+    - Constant rate of change
+    - Same increase/decrease every time
+    - Creates straight lines
+    - **Example:** Hourly wages, fixed pricing
+    - **Form:** f(x) = mx + b
+    """)
+    
+    st.markdown("### 🚀 Exponential Functions")
+    st.markdown("**Concept:** *Explosive Growth or Rapid Decay*")
+    st.markdown("""
+    - Multiplies by same factor each time
+    - Growth accelerates or decelerates
+    - Creates J-shaped curves
+    - **Example:** Viral content, compound interest
+    - **Form:** f(x) = a × b^x
+    """)
+
+with col2:
+    st.markdown("### 🏈 Quadratic Functions")
+    st.markdown("**Concept:** *Rise and Fall*")
+    st.markdown("""
+    - Has a maximum or minimum point
+    - Rate of change increases/decreases
+    - Creates parabolic (U or ∩ shaped) curves
+    - **Example:** Projectile motion, profit optimization
+    - **Form:** f(x) = ax² + bx + c
+    """)
+    
+    st.markdown("### 📉 Logarithmic Functions")
+    st.markdown("**Concept:** *Diminishing Returns*")
+    st.markdown("""
+    - Rapid growth initially, then levels off
+    - Gains get smaller over time
+    - Creates gradually flattening curves
+    - **Example:** Skill mastery, learning curves
+    - **Form:** f(x) = a × log(x + b)
+    """)
 
 st.markdown("---")
 
@@ -378,23 +447,32 @@ st.write(f"**Examples from our list:** {', '.join(type_info['examples'])}")
 # Quick Quiz Section
 st.header("🎲 Quick Understanding Check")
 
+# Initialize session state for understanding check
+if 'understanding_answers' not in st.session_state:
+    st.session_state.understanding_answers = {}
+if 'understanding_attempts' not in st.session_state:
+    st.session_state.understanding_attempts = {}
+
 quiz_questions = [
     {
         "question": "Which situation represents a linear function?",
         "options": ["Earning $28 per hour at auto plant", "Viral TikTok growth", "Lions QB throw arc", "Gym strength gains"],
         "correct": 0,
+        "hint": "💡 Think about which situation has the same change every time - steady and predictable, like a straight line!",
         "explanation": "Linear functions have a constant rate of change - $28 per hour is constant!"
     },
     {
         "question": "What makes something a function?",
         "options": ["It has an x and y", "Each input has exactly one output", "It creates a curve", "It uses numbers"],
         "correct": 1,
+        "hint": "💡 Think about the vending machine example - when you press a button (input), you get one specific snack (output), not random snacks!",
         "explanation": "Functions must pass the vertical line test - each input (x) gives exactly one output (y)!"
     },
     {
         "question": "Which function type would model a football's flight path?",
         "options": ["Linear", "Exponential", "Quadratic", "Logarithmic"],
         "correct": 2,
+        "hint": "💡 Think about the shape a football makes when thrown - it goes up, reaches a peak, then comes down. What type of curve is that?",
         "explanation": "Quadratic functions create parabolic shapes, perfect for projectile motion like a Lions QB throw!"
     }
 ]
@@ -403,11 +481,35 @@ for i, q in enumerate(quiz_questions):
     st.write(f"**Question {i+1}:** {q['question']}")
     answer = st.radio(f"Select your answer for Q{i+1}:", q['options'], key=f"q{i}")
     
+    # Initialize attempts for this question if not exists
+    if i not in st.session_state.understanding_attempts:
+        st.session_state.understanding_attempts[i] = 0
+    
     if st.button(f"Check Answer {i+1}", key=f"check{i}"):
         if q['options'].index(answer) == q['correct']:
             st.success(f"✅ Correct! {q['explanation']}")
+            st.session_state.understanding_answers[i] = True
+            st.session_state.understanding_attempts[i] = 0  # Reset attempts on correct answer
         else:
-            st.error(f"❌ Try again! {q['explanation']}")
+            st.session_state.understanding_attempts[i] += 1
+            
+            if st.session_state.understanding_attempts[i] == 1:
+                # First wrong attempt - give hint
+                st.warning(f"❌ Not quite! Let's try again with a hint:")
+                st.info(q["hint"])
+                st.session_state.understanding_answers[i] = False
+            else:
+                # Second wrong attempt - show correct answer
+                correct_answer = q['options'][q['correct']]
+                st.error(f"❌ Still not quite right. {q['explanation']}")
+                st.warning(f"💡 **The correct answer is: {correct_answer}**")
+                st.info("Review the concepts above and try again to master this!")
+                st.session_state.understanding_answers[i] = False
+
+# Check if all understanding questions are answered correctly
+if len(st.session_state.understanding_answers) == len(quiz_questions) and all(st.session_state.understanding_answers.values()):
+    st.success("🏆 Outstanding! You've demonstrated complete understanding!")
+    st.balloons()
 
 # Exit Reflection
 st.header("🧾 Reflection")
