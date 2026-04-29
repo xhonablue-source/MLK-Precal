@@ -7,18 +7,29 @@ import pandas as pd
 st.set_page_config(page_title="Crusader Vision: See the Function", page_icon="👁️")
 
 # --- Developer Credit ---
-col1, col2 = st.columns([1, 4])
-with col1:
-    # MLK High School Logo - you'll need to add the logo file to your project
-    try:
-        st.image("mlk_hs_logo.png", width=80)
-    except:
-        pass  # No fallback if logo file not found
-
-with col2:
-    st.markdown("**Developed for Martin Luther King High School | Detroit, Michigan **")
-    st.markdown("**Principal: Dr. Damian Perry **")
-    st.markdown("### www.cognitivecloud.ai by Xavier Honablue M.Ed")
+st.markdown("""
+<div style='background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); 
+            padding: 20px; 
+            border-radius: 10px; 
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);'>
+    <div style='color: white;'>
+        <h2 style='margin: 0; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);'>
+            🎓 Crusader Vision: See the Function
+        </h2>
+        <p style='margin: 5px 0; font-size: 1.1em; font-weight: 500;'>
+            Martin Luther King High School | Detroit, Michigan
+        </p>
+        <p style='margin: 5px 0; opacity: 0.95;'>
+            Principal: Dr. Damian Perry
+        </p>
+        <hr style='border: 1px solid rgba(255,255,255,0.3); margin: 10px 0;'>
+        <p style='margin: 5px 0; font-size: 0.95em;'>
+            💻 Powered by <strong>www.cognitivecloud.ai</strong> | Developed by Xavier Honablue M.Ed
+        </p>
+    </div>
+</div>
+""", unsafe_allow_html=True)
 
 st.markdown("---")
 
