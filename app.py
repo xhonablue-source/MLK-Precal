@@ -25,7 +25,7 @@ st.markdown("""
         </p>
         <hr style='border: 1px solid rgba(255,255,255,0.3); margin: 10px 0;'>
         <p style='margin: 5px 0; font-size: 0.95em;'>
-            💻 Powered by <strong>www.cognitivecloud.ai</strong> | Developed by Xavier Honablue M.Ed
+            💻 Powered by <strong><a href='https://www.cognitivecloud.ai' target='_blank' style='color: white; text-decoration: underline;'>www.cognitivecloud.ai</a></strong> | Developed by Xavier Honablue M.Ed
         </p>
     </div>
 </div>
