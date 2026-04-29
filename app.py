@@ -113,7 +113,60 @@ matching_data = {
 df = pd.DataFrame(matching_data)
 st.dataframe(df, use_container_width=True, hide_index=True)
 
-# Interactive matching quiz
+st.markdown("---")
+
+# Function Type Descriptions - MOVED HERE (between table and quiz)
+st.header("📊 Understanding Function Types")
+st.markdown("Before you test your knowledge, let's understand what each function type represents:")
+
+# Create columns for function type descriptions
+col1, col2 = st.columns(2)
+
+with col1:
+    st.markdown("### 📈 Linear Functions")
+    st.markdown("**Concept:** *Steady & Predictable*")
+    st.markdown("""
+    - Constant rate of change
+    - Same increase/decrease every time
+    - Creates straight lines
+    - **Example:** Hourly wages, fixed pricing
+    - **Form:** f(x) = mx + b
+    """)
+    
+    st.markdown("### 🚀 Exponential Functions")
+    st.markdown("**Concept:** *Explosive Growth or Rapid Decay*")
+    st.markdown("""
+    - Multiplies by same factor each time
+    - Growth accelerates or decelerates
+    - Creates J-shaped curves
+    - **Example:** Viral content, compound interest
+    - **Form:** f(x) = a × b^x
+    """)
+
+with col2:
+    st.markdown("### 🏈 Quadratic Functions")
+    st.markdown("**Concept:** *Rise and Fall*")
+    st.markdown("""
+    - Has a maximum or minimum point
+    - Rate of change increases/decreases
+    - Creates parabolic (U or ∩ shaped) curves
+    - **Example:** Projectile motion, profit optimization
+    - **Form:** f(x) = ax² + bx + c
+    """)
+    
+    st.markdown("### 📉 Logarithmic Functions")
+    st.markdown("**Concept:** *Diminishing Returns*")
+    st.markdown("""
+    - Rapid growth initially, then levels off
+    - Gains get smaller over time
+    - Creates gradually flattening curves
+    - **Example:** Skill mastery, learning curves
+    - **Form:** f(x) = a × log(x + b)
+    """)
+
+st.markdown("---")
+
+# Interactive matching quiz - NOW COMES AFTER THE FUNCTION TYPE DESCRIPTIONS
 st.subheader("📝 Quick Matching Quiz")
 st.markdown("Test your understanding by matching these function types:")
 
@@ -170,64 +223,13 @@ for question, data in quiz_options.items():
                 # Second wrong attempt - show correct answer
                 st.error(f"❌ Still not quite right. {data['explanation']}")
                 st.warning(f"💡 **The correct answer is: {data['correct']}**")
-                st.info("Review the function types section below and try again to master this concept!")
+                st.info("Review the function types section above and try again to master this concept!")
                 st.session_state.quiz_answers[question] = False
 
 # Check if all questions are answered correctly
 if len(st.session_state.quiz_answers) == len(quiz_options) and all(st.session_state.quiz_answers.values()):
     st.success("🎉 Perfect score! You've mastered function types!")
     st.balloons()
-
-st.markdown("---")
-
-# Function Type Descriptions
-st.header("📊 Understanding Function Types")
-st.markdown("Before we dive into the examples, let's understand what each function type represents:")
-
-# Create columns for function type descriptions
-col1, col2 = st.columns(2)
-
-with col1:
-    st.markdown("### 📈 Linear Functions")
-    st.markdown("**Concept:** *Steady & Predictable*")
-    st.markdown("""
-    - Constant rate of change
-    - Same increase/decrease every time
-    - Creates straight lines
-    - **Example:** Hourly wages, fixed pricing
-    - **Form:** f(x) = mx + b
-    """)
-    
-    st.markdown("### 🚀 Exponential Functions")
-    st.markdown("**Concept:** *Explosive Growth or Rapid Decay*")
-    st.markdown("""
-    - Multiplies by same factor each time
-    - Growth accelerates or decelerates
-    - Creates J-shaped curves
-    - **Example:** Viral content, compound interest
-    - **Form:** f(x) = a × b^x
-    """)
-
-with col2:
-    st.markdown("### 🏈 Quadratic Functions")
-    st.markdown("**Concept:** *Rise and Fall*")
-    st.markdown("""
-    - Has a maximum or minimum point
-    - Rate of change increases/decreases
-    - Creates parabolic (U or ∩ shaped) curves
-    - **Example:** Projectile motion, profit optimization
-    - **Form:** f(x) = ax² + bx + c
-    """)
-    
-    st.markdown("### 📉 Logarithmic Functions")
-    st.markdown("**Concept:** *Diminishing Returns*")
-    st.markdown("""
-    - Rapid growth initially, then levels off
-    - Gains get smaller over time
-    - Creates gradually flattening curves
-    - **Example:** Skill mastery, learning curves
-    - **Form:** f(x) = a × log(x + b)
-    """)
 
 st.markdown("---")
 
